@@ -1,0 +1,635 @@
+/* ==================== CSS VARIABLES ==================== */
+:root {
+  /* Core palette */
+  --color-bg: #EAEFEF;
+  --color-bg-light: #F5F7F7;
+  --color-border: #BFC9D1;
+  --color-border-light: #D8DEE2;
+  --color-primary: #25343F;
+  --color-primary-light: #3A4D5C;
+  --color-accent: #FF9B51;
+  --color-accent-dark: #E8863D;
+  --color-white: #FFFFFF;
+  --color-text: #25343F;
+  --color-text-muted: #5A6B78;
+
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-success-dark: #16a34a;
+  --color-success-bg: #d1fae5;
+  --color-success-text: #065f46;
+  --color-error: #dc2626;
+  --color-error-bg: #fee2e2;
+
+  /* Accent tints */
+  --color-accent-soft: rgba(255, 155, 81, 0.15);
+
+  /* Fluid type scale (mobile-first, scales with viewport) */
+  --font-xs: clamp(11px, 3vw, 13px);
+  --font-sm: clamp(12px, 3.5vw, 14px);
+  --font-md: clamp(14px, 4vw, 16px);
+  --font-lg: clamp(16px, 4.5vw, 18px);
+  --font-xl: clamp(18px, 5vw, 22px);
+  --font-2xl: clamp(22px, 6vw, 28px);
+  --font-display: clamp(80px, 25vw, 120px);
+
+  /* Design tokens */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgba(37, 52, 63, 0.04), 0 1px 3px rgba(37, 52, 63, 0.06);
+  --shadow-md: 0 2px 6px rgba(37, 52, 63, 0.06), 0 4px 12px rgba(37, 52, 63, 0.08);
+  --shadow-lg: 0 4px 12px rgba(37, 52, 63, 0.08), 0 10px 30px rgba(37, 52, 63, 0.12);
+
+  /* Motion */
+  --transition-fast: 0.12s ease;
+  --transition-normal: 0.15s ease;
+  --transition-slow: 0.2s ease;
+}
+
+[data-theme="dark"] {
+  --color-bg: #1A2330;
+  --color-bg-light: #243142;
+  --color-border: #3A4D5C;
+  --color-border-light: #2E3E4D;
+  --color-primary: #EAEFEF;
+  --color-primary-light: #BFC9D1;
+  --color-white: #243142;
+  --color-text: #EAEFEF;
+  --color-text-muted: #9BAAB8;
+
+  --color-success: #4ade80;
+  --color-success-dark: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.18);
+  --color-success-text: #86efac;
+  --color-error: #f87171;
+  --color-error-bg: rgba(220, 38, 38, 0.2);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* ==================== RESET & BASE ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  position: fixed;
+  inset: 0;
+}
+
+/* ==================== APP CONTAINER ==================== */
+.app {
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app.fullscreen {
+  position: fixed;
+  inset: 0;
+}
+
+/* ==================== LOGIN SCREEN ==================== */
+.app.login-mode {
+  background: var(--color-bg);
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5vw;
+  padding-top: max(5vw, env(safe-area-inset-top, 20px));
+  padding-bottom: max(5vw, env(safe-area-inset-bottom, 20px));
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app.login-mode::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 155, 81, 0.10), transparent 45%),
+    radial-gradient(circle at 82% 80%, rgba(255, 155, 81, 0.06), transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.login-screen {
+  position: relative;
+  z-index: 1;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border-light);
+  width: 100%;
+  max-width: 400px;
+  padding: clamp(28px, 8vw, 44px) clamp(20px, 6vw, 36px) clamp(24px, 7vw, 36px);
+  animation: slideIn 0.4s ease-out;
+  flex-shrink: 0;
+  margin: auto 0;
+  text-align: center;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-brand {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin: 0 0 24px;
+}
+
+.login-description {
+  font-size: var(--font-md);
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0 0 24px;
+}
+
+.alert.login-error {
+  text-align: left;
+  margin: 0 0 16px;
+}
+
+.login-cta {
+  width: 100%;
+  padding: clamp(14px, 4vw, 16px) 20px;
+  font-size: var(--font-md);
+}
+
+.login-loading {
+  color: var(--color-text-muted);
+  font-size: var(--font-md);
+  padding: 12px 0;
+}
+
+/* ==================== SCANNER SCREEN ==================== */
+.app.scanner-mode {
+  background: var(--color-bg);
+}
+
+.scanner-screen {
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--color-bg);
+}
+
+.scanner-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: max(15px, env(safe-area-inset-top, 15px)) 15px 20px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 200px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 6px;
+  z-index: 1100;
+}
+
+.user-menu-name {
+  padding: 8px 12px 10px;
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border-light);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: var(--font-sm);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.user-menu-item:hover {
+  background: var(--color-bg);
+}
+
+.scanner-error {
+  position: fixed;
+  bottom: max(80px, calc(env(safe-area-inset-bottom, 0px) + 80px));
+  left: 15px;
+  right: 15px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.scanner-error .alert {
+  max-width: 100%;
+  margin: 0;
+}
+
+/* ==================== SUCCESS SCREEN ==================== */
+.success-screen {
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
+  padding: 20px;
+}
+
+.success-animation {
+  text-align: center;
+}
+
+.checkmark {
+  font-size: var(--font-display);
+  color: var(--color-white);
+  animation: checkmarkPop 0.6s ease-out;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes checkmarkPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.success-animation p {
+  font-size: var(--font-2xl);
+  font-weight: 600;
+  color: var(--color-white);
+  margin-top: 20px;
+}
+
+.success-screen .alert-success {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-white);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  max-width: 350px;
+  margin-top: 30px;
+}
+
+/* ==================== QR SCANNER COMPONENT ==================== */
+.qr-scanner-start,
+.qr-scanner-error-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(15px, 5vw, 30px);
+  gap: 15px;
+}
+
+.qr-scanner-start .btn-primary {
+  width: min(85vw, 350px);
+  padding: clamp(16px, 5vw, 22px) clamp(30px, 10vw, 50px);
+  font-size: var(--font-xl);
+  border-radius: var(--radius-lg);
+}
+
+.qr-scanner-error-state h3,
+.qr-scanner-validating h3 {
+  color: var(--color-text);
+  text-align: center;
+  font-size: var(--font-xl);
+}
+
+.qr-scanner-error-state p {
+  color: var(--color-text);
+  text-align: center;
+  font-size: var(--font-md);
+}
+
+.qr-scanner-error-state .btn {
+  margin-top: 10px;
+}
+
+/* QR Scanner Active - Fullscreen */
+.qr-scanner-active,
+.qr-scanner-validating {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: #000;
+  overflow: hidden;
+}
+
+.qr-scanner-validating {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+}
+
+
+/* QR Reader overrides (consolidated) */
+#qr-reader,
+#qr-reader video,
+#qr-reader__scan_region,
+#qr-reader__scan_region video {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  border: none !important;
+}
+
+#qr-reader {
+  background: #000 !important;
+}
+
+#qr-reader video,
+#qr-reader__scan_region video {
+  object-fit: cover !important;
+}
+
+/* Scanner controls */
+.scanner-controls {
+  position: fixed;
+  bottom: max(25px, calc(env(safe-area-inset-bottom, 0px) + 25px));
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 4vw, 24px);
+}
+
+/* Zoom control */
+.zoom-control {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.5vw, 10px);
+  background: rgba(0, 0, 0, 0.5);
+  padding: clamp(5px, 1.5vw, 8px);
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.zoom-btn {
+  width: clamp(44px, 12vw, 56px);
+  height: clamp(44px, 12vw, 56px);
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--transition-normal), transform var(--transition-normal);
+}
+
+.zoom-btn:active {
+  transform: scale(0.9);
+}
+
+.zoom-btn-active {
+  background: var(--color-white);
+  color: var(--color-text);
+}
+
+/* Cancel button */
+.btn-cancel {
+  background: var(--color-white);
+  color: var(--color-text);
+  box-shadow: var(--shadow-lg);
+  padding: clamp(14px, 4vw, 20px) clamp(35px, 12vw, 60px);
+  font-size: var(--font-lg);
+  font-weight: 600;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-cancel:active {
+  transform: scale(0.95);
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-slow);
+  font-family: inherit;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #FFFFFF;
+  padding: clamp(14px, 4vw, 18px) 30px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* ==================== ALERTS ==================== */
+.alert {
+  padding: clamp(12px, 4vw, 15px) clamp(15px, 5vw, 20px);
+  border-radius: var(--radius-md);
+  margin: 15px 0;
+  text-align: center;
+  font-weight: 500;
+  font-size: var(--font-sm);
+}
+
+.alert-success {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.alert-error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+/* ==================== ICON BUTTON ==================== */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--transition-normal), color var(--transition-normal);
+}
+
+.icon-btn:hover {
+  background: color-mix(in srgb, var(--color-text) 8%, transparent);
+  color: var(--color-text);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle-fixed {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top, 12px));
+  right: 12px;
+  z-index: 1100;
+  background: color-mix(in srgb, var(--color-white) 90%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+}
+
+.scanner-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.scanner-header .icon-btn {
+  background: color-mix(in srgb, var(--color-white) 90%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-md);
+  color: var(--color-text);
+}
+
+.scanner-header .icon-btn:hover {
+  background: var(--color-white);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (orientation: landscape) and (max-height: 500px) {
+  .login-screen {
+    padding: 18px 22px;
+    max-width: 450px;
+  }
+
+  .login-subtitle {
+    margin-bottom: 14px;
+  }
+
+  .login-description {
+    margin-bottom: 14px;
+  }
+}
+
+@media (max-height: 600px) {
+  .login-screen {
+    padding: 22px 18px;
+  }
+}
+
+/* ==================== KEYBOARD ACTIVE ==================== */
+@supports (height: 100dvh) {
+  .app.login-mode {
+    min-height: 100dvh;
+  }
+}
+
+@supports not (height: 100dvh) {
+  .app.login-mode {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+}

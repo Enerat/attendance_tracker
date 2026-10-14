@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+attendance.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Coverage
+coverage/
+*.lcov
+
+# Build
+dist/
+build/
+package-lock.json
